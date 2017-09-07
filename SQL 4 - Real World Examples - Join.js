@@ -1,0 +1,135 @@
+--More real world scenarios
+
+--JOINS
+--combine data from different tables
+
+/*
+KEYWORDS:
+
+INNER JOIN (only common rows will be accounted for)
+OUTER JOIN (all rows accounted for?) just JOIN?
+
+LEFT / RIGHT
+
+FULL
+
+CROSS
+
+TRUNCATE - modify?
+
+*/
+
+
+//--GIVE ALL ROWS OF TABLE 1 + ALL COMMON ROWS OF TABLE 2
+TABLE 1 LEFT JOIN TABLE 2  //this does not need to be OUTER JOIN?
+//--result: rows in table 2 that are empty/non-matched will carry over as null
+
+
+Table 1 FULL OUTER JOIN Table 2
+//--result: all information from both tables is joined, and rows that are empty/non-matched will carry over as null
+
+
+Table 1 CROSS JOIN Table 2
+//--result: each row from Table 1 will be matched with every row from Table 2
+//--common info is duplicated instead of overlapped
+//--the rows will be much longer and there wil lbe many more rows in final result
+
+
+CREATE TABLE MYEMPLOYEE (EMPLOYEEID INT, FIRSTNAME VARCHAR(20), LASTNAME VARCHAR(20))
+
+INSERT INTO MYEMPLOYEE VALUES (1, 'Micheal', 'Scott')
+INSERT INTO MYEMPLOYEE VALUES (2, 'Pam', 'Bouvier')
+INSERT INTO MYEMPLOYEE VALUES (3, 'Sterling', 'Archer')
+INSERT INTO MYEMPLOYEE VALUES (4, 'Lana', 'Kane')
+
+SELECT * FROM MYEMPLOYEE
+
+CREATE TABLE MYSALARY (EMPLOYEEID INT, SALARY FLOAT)
+
+INSERT INTO MYSALARY VALUES (1, 10000)
+INSERT INTO MYSALARY VALUES (2, 20000)
+INSERT INTO MYSALARY VALUES (3, 40000)
+INSERT INTO MYSALARY VALUES (4, 50000)
+
+
+SELECT * FROM MYEMPLOYEE
+SELECT * FROM MYSALARY
+
+//--just combine both tables:
+SELECT * FROM MYEMPLOYEE A JOIN MYSALARY B ON A.EMPLOYEEID = B.EMPLOYEEID
+
+
+SELECT * FROM MYEMPLOYEE
+SELECT * FROM MYSALARY
+SELECT A.FIRSTNAME, A.LASTNAME, B.SALARY FROM MYEMPLOYEE A INNER JOIN MYSALARY B ON A.EMPLOYEEID = B.EMPLOYEEID
+//--gets a table with 3 columns: Firstnames, last names, salary
+//--recall that inner join will only give rows that are common between both tables
+
+//--left outer join
+ CREATE TABLE MYPHONE (EMPLOYEEID INT, PHONENUMBER INT)
+
+ INSERT INTO MYPHONE VALUES (1, 121212121)
+ INSERT INTO MYPHONE VALUES (2, 343434343)
+
+ SELECT * FROM MYEMPLOYEE
+ SELECT * FROM MYPHONE
+
+ SELECT A.FIRSTNAME, A.LASTNAME, B.PHONENUMBER FROM MYEMPLOYEE A LEFT JOIN MYPHONE B
+ ON A.EMPLOYEEID = B.EMPLOYEEID
+//creates a table with 4 rows (because Table A has 4)
+//but two entries are NULL (because Table B has only 2 rows)
+
+//--Right Join
+ SELECT A.FIRSTNAME, A.LASTNAME, B.PHONENUMBER FROM MYEMPLOYEE A RIGHT JOIN MYPHONE B
+ ON A.EMPLOYEEID = B.EMPLOYEEID
+ //result: only 2 rows because the TABLE B only has 2 rows
+
+ //--FULL OUTER JOIN
+ //--data in common gets overlapped, but nothing gets ignored, all gets added
+ CREATE TABLE MYCUSTOMER (CUSTOMERID INT, CUSTOMERNAME VARCHAR(20))
+
+ INSERT INTO MYCUSTOMER VALUES (1, 'PAUL')
+ INSERT INTO MYCUSTOMER VALUES (2, 'JAMES')
+
+ CREATE TABLE MYORDER (ORDERNUMBER INT, ORDERNAME VARCHAR(20), CUSTOMERID INT)
+
+INSERT INTO MYORDER VALUES (1, 'CORGI', 1)
+INSERT INTO MYORDER VALUES (2, 'CORGI2', 2)
+INSERT INTO MYORDER VALUES (3, 'CORGI3', 3)
+INSERT INTO MYORDER VALUES (4, 'CORGI4', 4)
+
+SELECT * FROM MYCUSTOMER
+SELECT * FROM MYORDER
+
+SELECT A.CUSTOMERID, A.CUSTOMERNAME, B.ORDERNUMBER, B.ORDERNAME
+FROM MYCUSTOMER A FULL OUTER JOIN MYORDER B
+ON A.CUSTOMERID = B.CUSTOMERID
+
+
+//--TO CHANGE THINGS AROUND FOR MORE PRACTICE:
+ TRUNCATE TABLE MYCUSTOMER
+ INSERT INTO MYCUSTOMER VALUES (1, 'PAUL')
+ INSERT INTO MYCUSTOMER VALUES (3, 'JAMES')
+
+ TRUNCATE TABLE MYORDER
+ INSERT INTO MYORDER VALUES (1, 'CORGI', 1)
+ INSERT INTO MYORDER VALUES (2, 'CORGI2', 2)
+ INSERT INTO MYORDER VALUES (3, 'CORGI3', 7)
+ INSERT INTO MYORDER VALUES (4, 'CORGI4', 8)
+
+ SELECT * FROM MYCUSTOMER
+ SELECT * FROM MYORDER
+
+ SELECT A.CUSTOMERID, A.CUSTOMERNAME, B.ORDERNUMBER, B.ORDERNAME
+ FROM MYCUSTOMER A FULL OUTER JOIN MYORDER B
+ ON A.CUSTOMERID = B.CUSTOMERID
+
+
+
+//--CROSS JOIN = each row matched with each row, so it multiplies the data/number of rows and columns
+//--2 columns from A x 2 columns from B = 4 columns
+//--2 rows from A x 4 rows from B = 8 rows
+SELECT * FROM MYCUSTOMER CROSS JOIN MYSALARY
+
+//another interesting way to write this:
+SELECT * FROM MYCUSTOMER, MYSALARY

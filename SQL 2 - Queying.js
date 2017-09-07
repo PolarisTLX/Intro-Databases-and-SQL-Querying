@@ -8,6 +8,28 @@ use [AdventureWorks2012]
 //--PATTERN:
 //--SELECT [column-name(s)] FROM [table-name]
 
+/*
+
+SPECIAL KEYWORDS:
+SELECT
+FROM
+WHERE
+
+"*"  = ALL
+IN
+
+(Strings)
+LIKE
+"%"
+
+(Ranges)
+> <
+AND
+BETWEEN
+
+*/
+
+
 
 SELECT * FROM [HumanResources].[Department]
 //* means EVERTYTHING/ ALL COLUNMS
